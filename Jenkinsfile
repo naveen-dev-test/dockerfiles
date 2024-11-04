@@ -1,5 +1,14 @@
 @Library('cib-shared-library') _  // Import your shared library for Kaniko
 
+properties([
+    parameters([
+        string(name: 'ARCHITECTURE', defaultValue: 'amd64', description: 'Specify architecture'),
+        string(name: 'PROJECT', defaultValue: 'myproject', description: 'Project name'),
+        string(name: 'DISTRIBUTION', defaultValue: 'latest', description: 'Distribution version'),
+        string(name: 'DOCKER_SUFFIX', defaultValue: '', description: 'Optional suffix for the Docker image tag')
+    ])
+])
+
 pipeline {
     agent any
 
