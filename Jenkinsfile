@@ -27,7 +27,7 @@ pipeline {
                     def imageTag = dockerfilePath.split('/')[2]  // Get the label name from the path
                     
                     // Set the image name based on your desired naming convention
-                    def dockerImage = "navkum11/test:ci-${ARCHITECTURE}-${PROJECT}-ubuntu:${DISTRIBUTION}${DOCKER_SUFFIX}"
+                    def dockerImage = "navkum11/test:ci-${params.ARCHITECTURE}-${params.PROJECT}-${params.DISTRIBUTION}${params.DOCKER_SUFFIX}"
 
                     // Call the kanikoBuild function defined in your shared library
                     kanikoBuild(
