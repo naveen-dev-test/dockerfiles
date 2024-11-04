@@ -1,0 +1,12 @@
+#!/bin/sh
+
+set -e
+
+env | grep ARMLMD_LICENSE_FILE  >> /etc/environment
+env | grep DOCKER_PREFIX >> /etc/environment
+env | grep LICENSE_VARIABLE >> /etc/environment
+env | grep PLANTUML_JAR_PATH >> /etc/environment
+env | grep TOOLS_DIR >> /etc/environment
+env | grep PATH >> /etc/environment
+env | grep GCC_7_3_1_PATH >> /etc/environment
+env | grep GCC_10_3_PATH >> /etc/environment

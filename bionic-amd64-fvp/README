@@ -1,0 +1,13 @@
+FVP
+---
+
+Dockerfiles used by LAVA to launch FVP models. To create a docker image, download
+manually the FVP model from https://silver.arm.com/browse/FM000, place it in the corresponding
+folder and create it, i.e.
+
+```bash
+$ cd fvp_rd_e1_edge_11.10_36
+$ # fetch model from Arm and place it at current directory
+$ tag=fvp_rd_e1_edge_11.10_36
+$ docker build --tag fvp:$tag .
+```

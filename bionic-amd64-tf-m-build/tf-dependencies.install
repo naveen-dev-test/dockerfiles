@@ -1,0 +1,45 @@
+#!/bin/sh
+
+set -e
+
+# Install cppcheck
+wget -q https://github.com/danmar/cppcheck/archive/2.6.tar.gz -O /tmp/cppcheck.tar.gz
+tar -xf /tmp/cppcheck.tar.gz -C /tmp
+(cd /tmp/cppcheck-*; make MATCHCOMPILER=yes FILESDIR=/usr/share/cppcheck -j$(nproc); make MATCHCOMPILER=yes FILESDIR=/usr/share/cppcheck install)
+
+# Install PlantUML
+curl --create-dirs -fsSLo ${PLANTUML_JAR_PATH} \
+  https://repo1.maven.org/maven2/net/sourceforge/plantuml/plantuml/1.2019.6/plantuml-1.2019.6.jar
+cat << EOF > /usr/bin/plantuml
+#!/bin/sh
+/usr/bin/java -jar ${PLANTUML_JAR_PATH} \${@}
+EOF
+chmod 0755 /usr/bin/plantuml
+
+# Install CMake
+curl --connect-timeout 5 --retry 5 --retry-delay 1 --create-dirs -fsSLo /tmp/cmake-Linux-x86_64.tar.gz \
+  https://github.com/Kitware/CMake/releases/download/v3.21.7/cmake-3.21.7-linux-x86_64.tar.gz
+tar -xf /tmp/cmake-Linux-x86_64.tar.gz -C ${TOOLS_DIR} --strip-components=1
+
+# Install Arm GCC v7.3.1 toolchain to GCC_7_3_1_DIR (arm-none-eabi)
+mkdir -p ${GCC_7_3_1_DIR}
+curl --create-dirs -fsSLo /tmp/gcc-arm-x86_64-arm-none-eabi-7-3-1.tar.bz2 \
+  https://developer.arm.com/-/media/Files/downloads/gnu-rm/7-2018q2/gcc-arm-none-eabi-7-2018-q2-update-linux.tar.bz2?revision=bc2c96c0-14b5-4bb4-9f18-bceb4050fee7?product=GNU%20Arm%20Embedded%20Toolchain%20Downloads,64-bit,,Linux,7-2018-q2-update
+tar -xf /tmp/gcc-arm-x86_64-arm-none-eabi-7-3-1.tar.bz2 -C ${GCC_7_3_1_DIR} --strip-components=1
+
+# Install Arm GCC v10.3 toolchain to GCC_10_3_DIR (arm-none-eabi)
+mkdir -p ${GCC_10_3_DIR}
+curl --create-dirs -fsSLo /tmp/gcc-arm-x86_64-arm-none-eabi-10-3.tar.bz2 \
+  https://developer.arm.com/-/media/Files/downloads/gnu-rm/10.3-2021.10/gcc-arm-none-eabi-10.3-2021.10-x86_64-linux.tar.bz2
+tar -xf /tmp/gcc-arm-x86_64-arm-none-eabi-10-3.tar.bz2 -C ${GCC_10_3_DIR} --strip-components=1
+
+# Install Arm GCC v11.2 toolchain to GCC_11_2_DIR (arm-none-eabi)
+mkdir -p ${GCC_11_2_DIR}
+curl --create-dirs -fsSLo /tmp/gcc-arm-11.2-2022.02-x86_64-arm-none-eabi.tar.xz \
+  https://developer.arm.com/-/media/Files/downloads/gnu/11.2-2022.02/binrel/gcc-arm-11.2-2022.02-x86_64-arm-none-eabi.tar.xz
+tar -xf /tmp/gcc-arm-11.2-2022.02-x86_64-arm-none-eabi.tar.xz -C ${GCC_11_2_DIR} --strip-components=1
+
+# Install Arm Clang v6.21 toolchain to ARMCLANG_6_21_DIR (armclang)
+mkdir -p /tmp/armclang-6.21
+tar -xf /tmp/ARMCompiler6.21_standalone_linux-x86_64.tar.gz -C /tmp/armclang-6.21
+/tmp/armclang-6.21/install_x86_64.sh --no-interactive --i-agree-to-the-contained-eula -d ${ARMCLANG_6_21_DIR}
